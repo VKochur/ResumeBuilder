@@ -1,4 +1,4 @@
-package main.java.simbirsoft.maketalents.resume_builder.dal.impl;
+package com.simbirsoft.maketalents.resume_builder.dal.impl;
 
 public enum TagTypes {
     FIO,
@@ -9,7 +9,7 @@ public enum TagTypes {
     URL_AVATAR,
     TARGET,
     EXPERIENCE,
-    BD_EDUCATION,
+    BS_EDUCATION,
     AD_EDUCATION,
     OTHER_INFO
 }

@@ -1,4 +1,4 @@
-package main.java.simbirsoft.maketalents.resume_builder.util;
+package com.simbirsoft.maketalents.resume_builder.util;
 
 public class Logger {
 
