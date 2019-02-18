@@ -1,7 +1,7 @@
 package com.simbirsoft.maketalents.resume_builder.dal.impl;
 
 import com.simbirsoft.maketalents.resume_builder.dal.ResumeScanner;
-import com.simbirsoft.maketalents.resume_builder.util.Logger;
+import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.*;
 import java.util.*;
@@ -10,6 +10,7 @@ public class PropertiesFileScanner implements ResumeScanner {
 
     private static final char TAG_SEPARATOR = '=';
     private static final String CONTEXT_SEPARATOR_REGEX = "\\|";
+    private static final String DEFAULT_VALUE_CONTEXT = "";
     private final String pathFile;
 
     private Map<TagTypes, List<String>> infoSource;
@@ -20,20 +21,30 @@ public class PropertiesFileScanner implements ResumeScanner {
         processingFile(pathFile);
     }
 
-    //TODO: переписать чтобы кириллица читалась
     private void processingFile(String pathFile) {
-       // try (BufferedReader bufferedReader = new BufferedReader(new FileReader(pathFile))) {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)))) {
             String line;
+
+            //first line can starts with BOM in UTF-8, or not
+            line = bufferedReader.readLine();
+            try {
+                processingLine(line);
+            } catch (InvalidPropertiesFormatException e) {
+                //probably file starts with BOM
+                line = new String(Arrays.copyOfRange(line.getBytes(),3, line.getBytes().length));
+                processingLine(line);
+            }
+
+            //other line must be correct in terms of Tags
             while ((line = bufferedReader.readLine()) != null) {
                 processingLine(line);
             }
         } catch (FileNotFoundException e) {
-            Logger.processingEx(e);
+            Util.processingEx(e);
         } catch (InvalidPropertiesFormatException e) {
-            Logger.processingEx(e);
+            Util.processingEx(e);
         } catch (IOException e) {
-            Logger.processingEx(e);
+            Util.processingEx(e);
         }
     }
 
@@ -53,80 +64,114 @@ public class PropertiesFileScanner implements ResumeScanner {
     private boolean isCorrectTag(String tag) {
         TagTypes tags[] = TagTypes.values();
         for (int i = 0; i < tags.length; i++) {
-
-            try {
-                String temp = new String(tag.getBytes("UTF-8"));
-
-                if (tag.equals(tags[i].toString())) {
-                    return true;
-                }
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if (tag.equals(tags[i].toString())) {
+                return true;
             }
-
-
         }
         return false;
     }
 
     @Override
     public String getName() {
-        return trimList(infoSource.get(TagTypes.FIO).toString());
+        if (infoSource.containsKey(TagTypes.FIO)) {
+            return trimList(infoSource.get(TagTypes.FIO).toString());
+        } else {
+            return DEFAULT_VALUE_CONTEXT;
+        }
     }
 
     private String trimList(String s) {
-        return s.substring(1, s.length()-1);
+        return s.substring(1, s.length() - 1);
     }
 
     @Override
     public String getDateOfBorn() {
-        return trimList(infoSource.get(TagTypes.DOB).toString());
+        if (infoSource.containsKey(TagTypes.DOB)) {
+            return trimList(infoSource.get(TagTypes.DOB).toString());
+        } else {
+            return DEFAULT_VALUE_CONTEXT;
+        }
     }
 
     @Override
     public List<String> getPhoneNumbers() {
-        return infoSource.get(TagTypes.PHONE);
+        if (infoSource.containsKey(TagTypes.PHONE)) {
+            return infoSource.get(TagTypes.PHONE);
+        } else {
+            return Arrays.asList(DEFAULT_VALUE_CONTEXT);
+        }
     }
 
     @Override
     public List<String> getEmails() {
-        return infoSource.get(TagTypes.EMAIL);
+        if (infoSource.containsKey(TagTypes.EMAIL)) {
+            return infoSource.get(TagTypes.EMAIL);
+        } else {
+            return Arrays.asList(DEFAULT_VALUE_CONTEXT);
+        }
     }
 
     @Override
     public String getSkype() {
-        return trimList(infoSource.get(TagTypes.SKYPE).toString());
+        if (infoSource.containsKey(TagTypes.SKYPE)) {
+            return trimList(infoSource.get(TagTypes.SKYPE).toString());
+        } else {
+            return DEFAULT_VALUE_CONTEXT;
+        }
     }
 
     @Override
     public String getUrlAvatar() {
-        return trimList(infoSource.get(TagTypes.URL_AVATAR).toString());
+        if (infoSource.containsKey(TagTypes.URL_AVATAR)) {
+            return trimList(infoSource.get(TagTypes.URL_AVATAR).toString());
+        } else {
+            return DEFAULT_VALUE_CONTEXT;
+        }
     }
 
     @Override
     public List<String> getTargets() {
-        return infoSource.get(TagTypes.TARGET);
+        if (infoSource.containsKey(TagTypes.TARGET)) {
+            return infoSource.get(TagTypes.TARGET);
+        } else {
+            return Arrays.asList(DEFAULT_VALUE_CONTEXT);
+        }
     }
 
     @Override
     public List<String> getExperience() {
-        return infoSource.get(TagTypes.EXPERIENCE);
+        if (infoSource.containsKey(TagTypes.EXPERIENCE)) {
+            return infoSource.get(TagTypes.EXPERIENCE);
+        } else {
+            return Arrays.asList(DEFAULT_VALUE_CONTEXT);
+        }
     }
 
     @Override
     public List<String> getBasicEducation() {
-        return infoSource.get(TagTypes.BS_EDUCATION);
+        if (infoSource.containsKey(TagTypes.BS_EDUCATION)) {
+            return infoSource.get(TagTypes.BS_EDUCATION);
+        } else {
+            return Arrays.asList(DEFAULT_VALUE_CONTEXT);
+        }
     }
 
     @Override
     public List<String> getAdditionalEducation() {
-        return infoSource.get(TagTypes.AD_EDUCATION);
+        if (infoSource.containsKey(TagTypes.AD_EDUCATION)) {
+            return infoSource.get(TagTypes.AD_EDUCATION);
+        } else {
+            return Arrays.asList(DEFAULT_VALUE_CONTEXT);
+        }
     }
 
     @Override
     public String getOtherInfo() {
-        return trimList(infoSource.get(TagTypes.OTHER_INFO).toString());
+        if (infoSource.containsKey(TagTypes.OTHER_INFO)) {
+            return trimList(infoSource.get(TagTypes.OTHER_INFO).toString());
+        } else {
+            return DEFAULT_VALUE_CONTEXT;
+        }
     }
 
     @Override
