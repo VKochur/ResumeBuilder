@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Резюме ${name}</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">Резюме</h1>
+    <h2 class="text-center">на должность ${careerTarget}</h2>
+    <br>
+    <div class="row">
+        <div class="col-8">
+            <table class="table">
+                <tr><td class="text-right">ФИО:</td><td>${name}</td></tr>
+                <tr><td class="text-right">Дата рождения:</td><td>${dateOfBorn}</td></tr>
+                <tr><td class="text-right">Телефон:</td><td>${phone}</td></tr>
+                <tr><td class="text-right">e-mail:</td><td>${email}</td></tr>
+                <tr><td class="text-right">Skype:</td><td>${skype}</td></tr>
+            </table>
+        </div>
+        <div class="col-4">
+            <img src="${avatarUrl}" alt="avatar" class="img-fluid">
+        </div>
+    </div>
+    <br>
+    <div class="col-12">
+        <h2>Цель:</h2>
+        <p>${target}</p>
+    </div>
+    <div class="col-12">
+        <h2>Опыт работы:</h2>
+        <p>${experience}</p>
+    </div>
+    <div class="col-12">
+        <h2>Образование:</h2>
+        <p>${baseEducation}</p>
+    </div>
+    <div class="col-12">
+        <h2>Дополнительное образование и курсы:</h2>
+        <p>${addedEducation}</p>
+    </div>
+    <div class="col-12">
+        <h2>Дополнительная информация:</h2>
+        <p>${otherInfo}</p>
+    </div>
+</div>
+</body>
+</html>

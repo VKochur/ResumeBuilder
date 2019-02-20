@@ -3,9 +3,9 @@ package com.simbirsoft.maketalents.resume_builder.dal;
 import java.util.List;
 
 /**
- *
+ * Interface provides data about resume
  */
-public interface ResumeScanner {
+public interface ResumeProvider {
 
     String getName();
 
@@ -28,5 +28,7 @@ public interface ResumeScanner {
     List<String> getAdditionalEducation();
 
     String getOtherInfo();
+
+    String getCareerTarget();
 
 }

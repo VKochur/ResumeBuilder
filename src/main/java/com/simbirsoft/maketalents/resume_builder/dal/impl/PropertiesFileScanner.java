@@ -1,12 +1,20 @@
 package com.simbirsoft.maketalents.resume_builder.dal.impl;
 
-import com.simbirsoft.maketalents.resume_builder.dal.ResumeScanner;
+import com.simbirsoft.maketalents.resume_builder.dal.ResumeProvider;
 import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.*;
 import java.util.*;
 
-public class PropertiesFileScanner implements ResumeScanner {
+/**
+ * Provides info about resume from properties file.
+ *
+ * Encoding file must be UTF-8
+ * Set of allowed tags is set of TagTypes
+ * Separator between key and value is '='
+ * In the case of various option for specific key is used '|' as separator
+ */
+public class PropertiesFileScanner implements ResumeProvider {
 
     private static final char TAG_SEPARATOR = '=';
     private static final String CONTEXT_SEPARATOR_REGEX = "\\|";
@@ -25,7 +33,7 @@ public class PropertiesFileScanner implements ResumeScanner {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)))) {
             String line;
 
-            //first line can starts with BOM in UTF-8, or not
+            //first line starts with BOM in UTF-8, or not
             line = bufferedReader.readLine();
             try {
                 processingLine(line);
@@ -74,20 +82,20 @@ public class PropertiesFileScanner implements ResumeScanner {
     @Override
     public String getName() {
         if (infoSource.containsKey(TagTypes.FIO)) {
-            return trimList(infoSource.get(TagTypes.FIO).toString());
+            return presentList(infoSource.get(TagTypes.FIO));
         } else {
             return DEFAULT_VALUE_CONTEXT;
         }
     }
 
-    private String trimList(String s) {
-        return s.substring(1, s.length() - 1);
+    private String presentList(List<String> list) {
+        return list.toString().substring(1, list.toString().length() - 1);
     }
 
     @Override
     public String getDateOfBorn() {
         if (infoSource.containsKey(TagTypes.DOB)) {
-            return trimList(infoSource.get(TagTypes.DOB).toString());
+            return presentList(infoSource.get(TagTypes.DOB));
         } else {
             return DEFAULT_VALUE_CONTEXT;
         }
@@ -114,7 +122,7 @@ public class PropertiesFileScanner implements ResumeScanner {
     @Override
     public String getSkype() {
         if (infoSource.containsKey(TagTypes.SKYPE)) {
-            return trimList(infoSource.get(TagTypes.SKYPE).toString());
+            return presentList(infoSource.get(TagTypes.SKYPE));
         } else {
             return DEFAULT_VALUE_CONTEXT;
         }
@@ -123,7 +131,7 @@ public class PropertiesFileScanner implements ResumeScanner {
     @Override
     public String getUrlAvatar() {
         if (infoSource.containsKey(TagTypes.URL_AVATAR)) {
-            return trimList(infoSource.get(TagTypes.URL_AVATAR).toString());
+            return presentList(infoSource.get(TagTypes.URL_AVATAR));
         } else {
             return DEFAULT_VALUE_CONTEXT;
         }
@@ -168,7 +176,16 @@ public class PropertiesFileScanner implements ResumeScanner {
     @Override
     public String getOtherInfo() {
         if (infoSource.containsKey(TagTypes.OTHER_INFO)) {
-            return trimList(infoSource.get(TagTypes.OTHER_INFO).toString());
+            return presentList(infoSource.get(TagTypes.OTHER_INFO));
+        } else {
+            return DEFAULT_VALUE_CONTEXT;
+        }
+    }
+
+    @Override
+    public String getCareerTarget() {
+        if (infoSource.containsKey(TagTypes.CAREER_TARGET)) {
+            return presentList(infoSource.get(TagTypes.CAREER_TARGET));
         } else {
             return DEFAULT_VALUE_CONTEXT;
         }
@@ -177,7 +194,8 @@ public class PropertiesFileScanner implements ResumeScanner {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder(String.format("%s = %s\n", "file", pathFile));
-        stringBuilder.append("FIO=").append(getName()).append("\n").
+        stringBuilder.append("FIO=").append("CareerTarget=").append(getCareerTarget()).
+                append(getName()).append("\n").
                 append("DOB=").append(getDateOfBorn()).append("\n").
                 append("email=").append(getEmails()).append("\n").
                 append("phone=").append(getPhoneNumbers()).append("\n").
