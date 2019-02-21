@@ -1,7 +1,6 @@
 package com.simbirsoft.maketalents.resume_builder;
 
 import com.simbirsoft.maketalents.resume_builder.image.impl.CodReplacerHtmlCreator;
-import com.simbirsoft.maketalents.resume_builder.util.Logger;
 import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.*;

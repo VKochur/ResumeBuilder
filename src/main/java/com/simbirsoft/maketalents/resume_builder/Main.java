@@ -3,11 +3,14 @@ package com.simbirsoft.maketalents.resume_builder;
 import com.simbirsoft.maketalents.resume_builder.image.impl.HtmlResumePrinter;
 import com.simbirsoft.maketalents.resume_builder.dal.impl.PropertiesFileScanner;
 import com.simbirsoft.maketalents.resume_builder.image.impl.HtmlResumeCodCreator;
-import com.simbirsoft.maketalents.resume_builder.util.Logger;
 import com.simbirsoft.maketalents.resume_builder.util.Util;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.InvalidPropertiesFormatException;
+import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 
 public class Main {
@@ -15,27 +18,52 @@ public class Main {
     private static final String DEFAULT_NAME_PROPERTY_FILE = "resume.properties";
     private static final String DEFAULT_NAME_HTML_FILE = "resume";
 
-    public static void main(String[] args){
-        System.out.println("Current directory: " + new File("").getAbsolutePath());
-        System.out.println("Path of Main class: " + Util.getPathCurrentDir());
-
+    private static Logger logger = Logger.getLogger(Main.class.getName());
+    static {
         try {
-            try (Logger logger = Logger.getInstance()) {
-                buidResume(args);
+            FileHandler fh = new FileHandler("LogApp.txt");
+            logger.addHandler(fh);
+
+/*
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Main.class.getClassLoader().getResourceAsStream("logging.properties"), StandardCharsets.UTF_8.name()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (FileNotFoundException e) {
+                Util.processingEx(e);
+            } catch (InvalidPropertiesFormatException e) {
+                Util.processingEx(e);
+            } catch (IOException e) {
+                Util.processingEx(e);
             }
+*/
+
+            //LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("logging.properties"));
         } catch (IOException e) {
-            System.err.println("logger error:");
             e.printStackTrace();
         }
     }
 
+    public static void main(String[] args) {
+
+        logger.info("Hello logger");
+        logger.info("Hello logger2");
+
+
+        if (10>2) {
+            return;
+        }
+        buidResume(args);
+
+    }
 
     /**
      * @param pathFiles
      */
     private static void buidResume(String... pathFiles) {
-        //путь к шаблону html
-        String pathToTemplate = new StringBuilder(Util.getPathCurrentDir()).append("\\ResumeBuilder\\html\\template.html").toString();
+        System.out.println("Current directory: " + new File("").getAbsolutePath());
+        System.out.println("Path of Main class: " + Util.getPathCurrentDir());
 
         //путь к файлу источнику и директории где следует создать html
 
@@ -66,8 +94,6 @@ public class Main {
 
         System.out.println("Name html file: " + htmlFileName);
         System.out.println("Dir html file: " + pathDirHtmlFile);
-
-        System.out.println("Path to template: " + pathToTemplate);
 
 
         HtmlResumeCodCreator htmlResumeCodCreator = new TemplateReplacer("html/template.html");
