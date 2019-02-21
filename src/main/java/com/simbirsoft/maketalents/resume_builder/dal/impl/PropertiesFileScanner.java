@@ -4,12 +4,14 @@ import com.simbirsoft.maketalents.resume_builder.dal.ResumeProvider;
 import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
  * Provides info about resume from properties file.
  *
- * Encoding file must be UTF-8
+ * Encoding file must be UTF-8 without BOM
+ *
  * Set of allowed tags is set of TagTypes
  * Separator between key and value is '='
  * In the case of various option for specific key is used '|' as separator
@@ -30,20 +32,8 @@ public class PropertiesFileScanner implements ResumeProvider {
     }
 
     private void processingFile(String pathFile) {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile)))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile), StandardCharsets.UTF_8.name()))) {
             String line;
-
-            //first line starts with BOM in UTF-8, or not
-            line = bufferedReader.readLine();
-            try {
-                processingLine(line);
-            } catch (InvalidPropertiesFormatException e) {
-                //probably file starts with BOM
-                line = new String(Arrays.copyOfRange(line.getBytes(),3, line.getBytes().length));
-                processingLine(line);
-            }
-
-            //other line must be correct in terms of Tags
             while ((line = bufferedReader.readLine()) != null) {
                 processingLine(line);
             }

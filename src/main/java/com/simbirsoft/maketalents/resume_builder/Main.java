@@ -1,9 +1,9 @@
 package com.simbirsoft.maketalents.resume_builder;
 
-import com.simbirsoft.maketalents.resume_builder.image.impl.FileReplacerHtml;
 import com.simbirsoft.maketalents.resume_builder.image.impl.HtmlResumePrinter;
 import com.simbirsoft.maketalents.resume_builder.dal.impl.PropertiesFileScanner;
 import com.simbirsoft.maketalents.resume_builder.image.impl.HtmlResumeCodCreator;
+import com.simbirsoft.maketalents.resume_builder.util.Logger;
 import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.File;
@@ -15,11 +15,18 @@ public class Main {
     private static final String DEFAULT_NAME_PROPERTY_FILE = "resume.properties";
     private static final String DEFAULT_NAME_HTML_FILE = "resume";
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         System.out.println("Current directory: " + new File("").getAbsolutePath());
         System.out.println("Path of Main class: " + Util.getPathCurrentDir());
 
-        buidResume(args);
+        try {
+            try (Logger logger = Logger.getInstance()) {
+                buidResume(args);
+            }
+        } catch (IOException e) {
+            System.err.println("logger error:");
+            e.printStackTrace();
+        }
     }
 
 
@@ -28,7 +35,7 @@ public class Main {
      */
     private static void buidResume(String... pathFiles) {
         //путь к шаблону html
-        String pathToTemplate = new StringBuilder(Util.getPathCurrentDir()).append("\\html\\template.html").toString();
+        String pathToTemplate = new StringBuilder(Util.getPathCurrentDir()).append("\\ResumeBuilder\\html\\template.html").toString();
 
         //путь к файлу источнику и директории где следует создать html
 
@@ -62,11 +69,8 @@ public class Main {
 
         System.out.println("Path to template: " + pathToTemplate);
 
-        if (10>0){
-            return;
-        }
 
-        HtmlResumeCodCreator htmlResumeCodCreator = new FileReplacerHtml(pathToTemplate);
+        HtmlResumeCodCreator htmlResumeCodCreator = new TemplateReplacer("html/template.html");
         htmlResumeCodCreator.setProvider(new PropertiesFileScanner(pathDirPropertiesFile + "\\" + propertiesFileName));
         HtmlResumePrinter htmlResumePrinter = new HtmlResumePrinter();
         htmlResumePrinter.setHtmlResumeCodCreater(htmlResumeCodCreator);
