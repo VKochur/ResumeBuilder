@@ -1,17 +1,27 @@
 package com.simbirsoft.maketalents.resume_builder;
 
-import com.simbirsoft.maketalents.resume_builder.image.impl.CodReplacerHtmlCreator;
-import com.simbirsoft.maketalents.resume_builder.util.Util;
+import com.simbirsoft.maketalents.resume_builder.image.impl.CodeReplacerHtmlCreator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class TemplateReplacer extends CodReplacerHtmlCreator {
+/**
+ * Creates html cod by replace template
+ *
+ * template is html code in resources
+ * All substrings in template like ${keyValue} replaces to value : getSubstitution().getKey(keyValue) = value
+ */
+public class TemplateReplacer extends CodeReplacerHtmlCreator {
 
     private String preCod;
 
-    public TemplateReplacer(String resourcePath) {
+    public TemplateReplacer(String resourcePath) throws IOException {
         InputStream inputTemplate = getClass().getClassLoader().getResourceAsStream(resourcePath);
         StringBuilder fileContent = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputTemplate, StandardCharsets.UTF_8.name()))) {
@@ -19,19 +29,15 @@ public class TemplateReplacer extends CodReplacerHtmlCreator {
             while ((line = bufferedReader.readLine()) != null) {
                 fileContent.append(line).append("\n");
             }
-        } catch (FileNotFoundException e) {
-            Util.processingEx(e);
-        } catch (InvalidPropertiesFormatException e) {
-            Util.processingEx(e);
-        } catch (IOException e) {
-            Util.processingEx(e);
+        } catch (NullPointerException e) {
+            throw new IOException("not found template resource for html: " + resourcePath, e);
         }
-
         preCod = fileContent.toString();
+
     }
 
     @Override
-    public String getPreCod() {
+    public String getPreCode() {
         return preCod;
     }
 

@@ -13,14 +13,14 @@ public class HtmlResumePrinter implements ResumePrinter, FileCreator {
     private static final String DEFAULT_NAME_FILE = "";
     private String pathDirToFile;
     private String nameFile;
-    private HtmlResumeCodCreator htmlResumeCodCreater;
+    private HtmlResumeCodeCreator htmlResumeCodCreater;
 
     public HtmlResumePrinter() {
         pathDirToFile = DEFAULT_DIR_FILE;
         nameFile = DEFAULT_NAME_FILE;
     }
 
-    public void setHtmlResumeCodCreater(HtmlResumeCodCreator htmlResumeCodCreater) {
+    public void setHtmlResumeCodCreater(HtmlResumeCodeCreator htmlResumeCodCreater) {
         this.htmlResumeCodCreater = htmlResumeCodCreater;
     }
 
@@ -31,7 +31,7 @@ public class HtmlResumePrinter implements ResumePrinter, FileCreator {
      */
     @Override
     public void print() throws IOException {
-        createFile(htmlResumeCodCreater.getHtmlCod(), "html");
+        createFile(htmlResumeCodCreater.getHtmlCode(), "html");
     }
 
     @Override

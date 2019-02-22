@@ -1,7 +1,6 @@
 package com.simbirsoft.maketalents.resume_builder.dal.impl;
 
 import com.simbirsoft.maketalents.resume_builder.dal.ResumeProvider;
-import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +14,16 @@ import java.util.*;
  * Set of allowed tags is set of TagTypes
  * Separator between key and value is '='
  * In the case of various option for specific key is used '|' as separator
+ * In case not found specific tag, the associated context is ""
+ *
+ * Example properties file:
+ ' FIO=Name Second_Name
+ * DOB=13.08.1983
+ * EMAIL=name@rambler.ru|name@gmail.com
+ * PHONE=???7???
+ * SKYPE=login
+ * TARGET=target1|target2|target3
+ * CAREER_TARGET=career target
  */
 public class PropertiesFileScanner implements ResumeProvider {
 
@@ -25,24 +34,18 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     private Map<TagTypes, List<String>> infoSource;
 
-    public PropertiesFileScanner(String pathFile) {
+    public PropertiesFileScanner(String pathFile) throws InvalidPropertiesFormatException, IOException {
         this.pathFile = pathFile;
         infoSource = new HashMap<>();
         processingFile(pathFile);
     }
 
-    private void processingFile(String pathFile) {
+    private void processingFile(String pathFile) throws InvalidPropertiesFormatException, IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(pathFile), StandardCharsets.UTF_8.name()))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 processingLine(line);
             }
-        } catch (FileNotFoundException e) {
-            Util.processingEx(e);
-        } catch (InvalidPropertiesFormatException e) {
-            Util.processingEx(e);
-        } catch (IOException e) {
-            Util.processingEx(e);
         }
     }
 
@@ -61,8 +64,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     private boolean isCorrectTag(String tag) {
         TagTypes tags[] = TagTypes.values();
-        for (int i = 0; i < tags.length; i++) {
-            if (tag.equals(tags[i].toString())) {
+        for (TagTypes tag1 : tags) {
+            if (tag.equals(tag1.toString())) {
                 return true;
             }
         }
@@ -183,19 +186,18 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder(String.format("%s = %s\n", "file", pathFile));
-        stringBuilder.append("FIO=").append("CareerTarget=").append(getCareerTarget()).
-                append(getName()).append("\n").
-                append("DOB=").append(getDateOfBorn()).append("\n").
-                append("email=").append(getEmails()).append("\n").
-                append("phone=").append(getPhoneNumbers()).append("\n").
-                append("skype=").append(getSkype()).append("\n").
-                append("avatar=").append(getUrlAvatar()).append("\n").
-                append("target=").append(getTargets()).append("\n").
-                append("experience=").append(getExperience()).append("\n").
-                append("bs_educt=").append(getBasicEducation()).append("\n").
-                append("ad_educ=").append(getAdditionalEducation()).append("\n").
-                append("other=").append(getOtherInfo()).append("\n");
-        return stringBuilder.toString();
+        String stringBuilder = String.format("%s = %s\n", "file", pathFile) + "FIO=" + "CareerTarget=" + getCareerTarget() +
+                getName() + "\n" +
+                "DOB=" + getDateOfBorn() + "\n" +
+                "email=" + getEmails() + "\n" +
+                "phone=" + getPhoneNumbers() + "\n" +
+                "skype=" + getSkype() + "\n" +
+                "avatar=" + getUrlAvatar() + "\n" +
+                "target=" + getTargets() + "\n" +
+                "experience=" + getExperience() + "\n" +
+                "bs_educt=" + getBasicEducation() + "\n" +
+                "ad_educ=" + getAdditionalEducation() + "\n" +
+                "other=" + getOtherInfo() + "\n";
+        return stringBuilder;
     }
 }

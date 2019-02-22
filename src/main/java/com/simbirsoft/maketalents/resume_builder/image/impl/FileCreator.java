@@ -3,6 +3,9 @@ package com.simbirsoft.maketalents.resume_builder.image.impl;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Creates text file
+ */
 public interface FileCreator {
 
     String getPathDirToFile();
@@ -13,21 +16,14 @@ public interface FileCreator {
 
     void setNameFile(String nameFile);
 
-    default void checkPathDir() throws IOException {
-        File directory = new File(getPathDirToFile()).getAbsoluteFile();
-        if (!directory.exists()) {
-            throw new IOException("path not exists: " + directory.getAbsolutePath());
-        }
-        if (!directory.isDirectory()) {
-            throw new IOException("path is not directory: " + directory.getAbsolutePath());
-        }
-        if (!directory.canWrite()) {
-            throw new IOException("not able to write to directory: " + directory.getAbsolutePath());
-        }
-    }
-
+    /**
+     * Creates text file
+     *
+     * @param content
+     * @param typeFile sample: "txt", "html", "java" etc
+     * @throws IOException in case if not exists specific directory, or no access
+     */
     default void createFile(String content, String typeFile) throws IOException {
-        checkPathDir();
         File file = new File(String.format("%s%s%s%c%s", new File(getPathDirToFile()).getAbsolutePath(), System.getProperty("file.separator"), getNameFile(),'.',typeFile));
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8.name()))) {
                 writer.write(content);
