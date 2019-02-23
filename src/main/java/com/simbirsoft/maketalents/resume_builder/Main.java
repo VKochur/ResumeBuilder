@@ -26,8 +26,8 @@ public class Main {
      */
     private static void buidResume(String... pathFiles) {
         //by default
-        String pathDirPropertiesFile = Util.getPathCurrentDir();
-        String pathDirHtmlFile = Util.getPathCurrentDir();
+        String pathDirPropertiesFile = Util.getPathExecutableDir();
+        String pathDirHtmlFile = Util.getPathExecutableDir();
         String propertiesFileName = DEFAULT_NAME_PROPERTY_FILE;
         String htmlFileName = DEFAULT_NAME_HTML_FILE;
 
@@ -53,7 +53,7 @@ public class Main {
             HtmlResumeCodeCreator htmlResumeCodeCreator = new TemplateReplacer("html/template.html");
             htmlResumeCodeCreator.setProvider(new PropertiesFileScanner(pathDirPropertiesFile + "\\" + propertiesFileName));
             HtmlResumePrinter htmlResumePrinter = new HtmlResumePrinter();
-            htmlResumePrinter.setHtmlResumeCodCreater(htmlResumeCodeCreator);
+            htmlResumePrinter.setHtmlResumeCodeCreator(htmlResumeCodeCreator);
             htmlResumePrinter.setPathDirToFile(pathDirHtmlFile);
             htmlResumePrinter.setNameFile(htmlFileName);
             htmlResumePrinter.print();

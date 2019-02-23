@@ -9,19 +9,19 @@ import java.util.logging.*;
 
 public class Util {
 
-    private static java.util.logging.Logger logger;
+    private static Logger logger;
 
     static {
         logger = java.util.logging.Logger.getLogger(Util.class.getName());
 
         try {
-            FileHandler fh = new FileHandler(Util.getPathCurrentDir() + "\\ResumeBuilder.log");
+            FileHandler fh = new FileHandler(Util.getPathExecutableDir() + "\\ResumeBuilder.log");
             fh.setFormatter(new Formatter() {
                 private static final String format = "[%s][%s] %s %s %n";
 
                 @Override
                 public synchronized String format(LogRecord lr) {
-                    String stackTrace ="";
+                    String stackTrace = "";
                     if (lr.getThrown() != null) {
                         StringWriter sw = new StringWriter();
                         PrintWriter pw = new PrintWriter(sw);
@@ -46,8 +46,8 @@ public class Util {
         return logger;
     }
 
-    //получить текущий каталог где лежит
-    public static String getPathCurrentDir() {
+    //get directory of executable file
+    public static String getPathExecutableDir() {
         File file = null;
         try {
             file = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());

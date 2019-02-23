@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Creates text file
+ * Creates text file encode UTF-8
  */
 public interface FileCreator {
 

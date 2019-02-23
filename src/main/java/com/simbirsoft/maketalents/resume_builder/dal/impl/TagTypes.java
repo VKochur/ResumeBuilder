@@ -1,5 +1,8 @@
 package com.simbirsoft.maketalents.resume_builder.dal.impl;
 
+/**
+ * Allowed tags for property file
+ */
 public enum TagTypes {
     FIO,
     DOB,

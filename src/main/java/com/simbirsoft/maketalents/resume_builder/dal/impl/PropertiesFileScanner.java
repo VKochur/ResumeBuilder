@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * Provides info about resume from properties file.
+ * Provides info about resume from property file.
  *
  * Encoding file must be UTF-8 without BOM
  *
@@ -34,6 +34,12 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     private Map<TagTypes, List<String>> infoSource;
 
+    /**
+     *
+     * @param pathFile path to file properties
+     * @throws InvalidPropertiesFormatException in case illegal file properties
+     * @throws IOException in case inaccessibility file properties
+     */
     public PropertiesFileScanner(String pathFile) throws InvalidPropertiesFormatException, IOException {
         this.pathFile = pathFile;
         infoSource = new HashMap<>();

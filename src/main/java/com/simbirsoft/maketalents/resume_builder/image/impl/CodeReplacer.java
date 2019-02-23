@@ -10,12 +10,12 @@ public interface CodeReplacer {
     Map<String,String> getSubstitution();
 
     default String getPostCode() {
-        String postCod = new String(getPreCode());
+        String postCode = new String(getPreCode());
         Set<Map.Entry<String, String>> entrySet = getSubstitution().entrySet();
         for (Map.Entry<String, String> entry : entrySet) {
             String regEx =  new StringBuilder("\\$\\{").append(entry.getKey()).append("\\}").toString();
-            postCod = postCod.replaceAll(regEx, entry.getValue());
+            postCode = postCode.replaceAll(regEx, entry.getValue());
         }
-        return postCod;
+        return postCode;
     }
 }
