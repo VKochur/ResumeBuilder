@@ -1,7 +1,5 @@
 package com.simbirsoft.maketalents.resume_builder.image.impl;
 
-import com.simbirsoft.maketalents.resume_builder.image.impl.CodeReplacerHtmlCreator;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

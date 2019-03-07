@@ -1,10 +1,11 @@
 package com.simbirsoft.maketalents.resume_builder.service;
 
-import com.simbirsoft.maketalents.resume_builder.image.impl.TemplateReplacer;
+import com.simbirsoft.maketalents.resume_builder.dal.impl.PropertiesFileLoader;
 import com.simbirsoft.maketalents.resume_builder.dal.impl.PropertiesFileScanner;
 import com.simbirsoft.maketalents.resume_builder.dal.impl.TagTypes;
 import com.simbirsoft.maketalents.resume_builder.image.impl.HtmlResumeCodeCreator;
 import com.simbirsoft.maketalents.resume_builder.image.impl.HtmlResumePrinter;
+import com.simbirsoft.maketalents.resume_builder.image.impl.TemplateReplacer;
 import com.simbirsoft.maketalents.resume_builder.util.Util;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class SummaryService {
 
         try {
             HtmlResumeCodeCreator htmlResumeCodeCreator = new TemplateReplacer("html/template.html");
-            htmlResumeCodeCreator.setProvider(new PropertiesFileScanner(pathDirPropertiesFile + "\\" + propertiesFileName));
+            htmlResumeCodeCreator.setProvider(new PropertiesFileLoader(pathDirPropertiesFile + "\\" + propertiesFileName));
             HtmlResumePrinter htmlResumePrinter = new HtmlResumePrinter();
             htmlResumePrinter.setHtmlResumeCodeCreator(htmlResumeCodeCreator);
             htmlResumePrinter.setPathDirToFile(pathDirHtmlFile);
@@ -46,7 +47,8 @@ public class SummaryService {
             Util.getLogger().info("success");
 
         } catch (InvalidPropertiesFormatException e) {
-            Util.getLogger().log(Level.SEVERE, "Illegal properties file. Encode file must be UTF-8 without BOM. Legal tags: " + Arrays.toString(TagTypes.values()) + "\n " + e.getMessage(), e);
+            Util.getLogger().log(Level.SEVERE, "Illegal properties file. Encode file must be UTF-8 without BOM." +
+                    " Legal tags: " + Arrays.toString(TagTypes.values()) + "\n " + e.getMessage(), e);
         } catch (IOException e) {
             Util.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }

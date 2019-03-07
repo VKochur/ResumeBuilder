@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
+ * Deprecated. Use com.simbirsoft.maketalents.resume_builder.dal.impl.PropertiesFileLoader instead
+ *
  * Provides info about resume from property file.
  *
  * Encoding file must be UTF-8 without BOM
@@ -19,12 +21,13 @@ import java.util.*;
  * Example properties file:
  ' FIO=Name Second_Name
  * DOB=13.08.1983
- * EMAIL=name@rambler.ru|name@gmail.com
- * PHONE=???7???
+ * EMAILS=name@rambler.ru|name@gmail.com
+ * PHONES=???7???
  * SKYPE=login
- * TARGET=target1|target2|target3
+ * TARGETS=target1|target2|target3
  * CAREER_TARGET=career target
  */
+@Deprecated
 public class PropertiesFileScanner implements ResumeProvider {
 
     private static final char TAG_SEPARATOR = '=';
@@ -102,8 +105,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public List<String> getPhoneNumbers() {
-        if (infoSource.containsKey(TagTypes.PHONE)) {
-            return infoSource.get(TagTypes.PHONE);
+        if (infoSource.containsKey(TagTypes.PHONES)) {
+            return infoSource.get(TagTypes.PHONES);
         } else {
             return Arrays.asList(DEFAULT_VALUE_CONTEXT);
         }
@@ -111,8 +114,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public List<String> getEmails() {
-        if (infoSource.containsKey(TagTypes.EMAIL)) {
-            return infoSource.get(TagTypes.EMAIL);
+        if (infoSource.containsKey(TagTypes.EMAILS)) {
+            return infoSource.get(TagTypes.EMAILS);
         } else {
             return Arrays.asList(DEFAULT_VALUE_CONTEXT);
         }
@@ -138,8 +141,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public List<String> getTargets() {
-        if (infoSource.containsKey(TagTypes.TARGET)) {
-            return infoSource.get(TagTypes.TARGET);
+        if (infoSource.containsKey(TagTypes.TARGETS)) {
+            return infoSource.get(TagTypes.TARGETS);
         } else {
             return Arrays.asList(DEFAULT_VALUE_CONTEXT);
         }
@@ -147,8 +150,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public List<String> getExperience() {
-        if (infoSource.containsKey(TagTypes.EXPERIENCE)) {
-            return infoSource.get(TagTypes.EXPERIENCE);
+        if (infoSource.containsKey(TagTypes.EXPERIENCES)) {
+            return infoSource.get(TagTypes.EXPERIENCES);
         } else {
             return Arrays.asList(DEFAULT_VALUE_CONTEXT);
         }
@@ -156,8 +159,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public List<String> getBasicEducation() {
-        if (infoSource.containsKey(TagTypes.BS_EDUCATION)) {
-            return infoSource.get(TagTypes.BS_EDUCATION);
+        if (infoSource.containsKey(TagTypes.BS_EDUCATIONS)) {
+            return infoSource.get(TagTypes.BS_EDUCATIONS);
         } else {
             return Arrays.asList(DEFAULT_VALUE_CONTEXT);
         }
@@ -165,8 +168,8 @@ public class PropertiesFileScanner implements ResumeProvider {
 
     @Override
     public List<String> getAdditionalEducation() {
-        if (infoSource.containsKey(TagTypes.AD_EDUCATION)) {
-            return infoSource.get(TagTypes.AD_EDUCATION);
+        if (infoSource.containsKey(TagTypes.AD_EDUCATIONS)) {
+            return infoSource.get(TagTypes.AD_EDUCATIONS);
         } else {
             return Arrays.asList(DEFAULT_VALUE_CONTEXT);
         }
