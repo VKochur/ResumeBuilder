@@ -1,4 +1,4 @@
-package com.simbirsoft.maketalents.resume_builder;
+package com.simbirsoft.maketalents.resume_builder.image.impl;
 
 import com.simbirsoft.maketalents.resume_builder.image.impl.CodeReplacerHtmlCreator;
 
@@ -59,10 +59,10 @@ public class TemplateReplacer extends CodeReplacerHtmlCreator {
         return substitution;
     }
 
-    private String getPresent(List<String> emails) {
+    private String getPresent(List<String> lines) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (String email : emails) {
-            stringBuilder.append(email).append("<br>");
+        for (String line : lines) {
+            stringBuilder.append(line).append("<br>");
         }
         return stringBuilder.toString();
     }

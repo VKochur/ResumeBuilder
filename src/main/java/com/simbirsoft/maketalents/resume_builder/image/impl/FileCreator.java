@@ -24,10 +24,16 @@ public interface FileCreator {
      * @throws IOException in case if not exists specific directory, or no access
      */
     default void createFile(String content, String typeFile) throws IOException {
-        File file = new File(String.format("%s%s%s%c%s", new File(getPathDirToFile()).getAbsolutePath(), System.getProperty("file.separator"), getNameFile(),'.',typeFile));
+        File file = new File(
+                String.format("%s%s%s%c%s",
+                new File(getPathDirToFile()).getAbsolutePath(),
+                        System.getProperty("file.separator"),
+                        getNameFile(),
+                        '.',
+                        typeFile));
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8.name()))) {
-                writer.write(content);
-                writer.flush();
+            writer.write(content);
+            writer.flush();
         }
     }
 
